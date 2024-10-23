@@ -3,10 +3,15 @@ kivy.require('2.3.0') # replace with your current kivy version !
 
 from kivy.app import App
 from kivy.uix.label import Label
+from kivy.uix.widget import Widget
+
 import typing
 import towers_of_hanoi as toh
 
-class MyApp(App):
+class TowersOfHanoiAnimation(Widget):
+	pass
+
+class TohApp(App):
 
 	def build(self):
 		return Label(text='Hello world')
@@ -16,4 +21,4 @@ class MyApp(App):
 
 
 if __name__ == '__main__':
-	MyApp().run()
+	TohApp().run()
