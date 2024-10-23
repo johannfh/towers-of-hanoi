@@ -1,6 +1,5 @@
 import typing
 
-
 class Move:
     source: int
     destination: int
@@ -12,23 +11,9 @@ class Move:
     def __str__(self) -> str:
         return f"{self.source} -> {self.destination}"
 
-
-def print_moves(moves: typing.List[Move]):
+def print_moves(moves: typing.List[Move]) -> None:
     for move in moves:
         print(move)
-
-
-class MoveListBuilder:
-    moves: typing.List[Move]
-
-    def build(self) -> typing.List[Move]:
-        return self.moves
-
-    def append_moves(self, moves: typing.List[tuple[int, int]]):
-        for move in moves:
-            self.moves.append(Move(source=move[0], destination=move[1]))
-        return self
-
 
 def towers_of_hanoi(
     n: int, source: int, destination: int, auxilary: int
@@ -58,7 +43,6 @@ def towers_of_hanoi(
             moves.append(i)
 
     return moves
-
 
 if __name__ == "__main__":
     n = 4
