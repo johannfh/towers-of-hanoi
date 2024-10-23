@@ -1,24 +1,46 @@
-import kivy
-kivy.require('2.3.0') # replace with your current kivy version !
+import logging
+# import towers_of_hanoi as toh
 
-from kivy.app import App
-from kivy.uix.label import Label
-from kivy.uix.widget import Widget
+import pygame
 
-import typing
-import towers_of_hanoi as toh
+class Game():
+    def start(self, logger: logging.Logger) -> None:
+        self.logger = logger
+        self.logger.info("Starting game")
+        pygame.init()
 
-class TowersOfHanoiAnimation(Widget):
-	pass
+        self.screen = pygame.display.set_mode(size=(1080, 720))
+        self.clock = pygame.time.Clock()
+        self.running = True
+        self.fps = 60
+        self.delta_time = self.fps / 1000
 
-class TohApp(App):
+        while self.running:
+            self.mainloop()
 
-	def build(self):
-		return Label(text='Hello world')
+        self.logger.info("Game exited successfully")
+   
+    def mainloop(self) -> None:
+        # process events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
 
-	def solve_for(self, n: int) -> typing.List[toh.Move]:
-		return []
+        # update screen
+        self.screen.fill(color="purple")
 
+        # apply screen changes
+        pygame.display.flip()
 
-if __name__ == '__main__':
-	TohApp().run()
+        # calculate deltatime
+        self.delta_time = self.clock.tick(self.fps) / 1000
+
+if __name__ == "__main__":
+
+    logger = logging.getLogger(__name__)
+
+    # TODO: Maybe make this dependant on a flag
+    logger.setLevel(logging.DEBUG)
+
+    game = Game()
+    game.start(logger)
