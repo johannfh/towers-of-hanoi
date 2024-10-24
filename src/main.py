@@ -7,9 +7,14 @@ import pygame
 
 import utils
 
+class Disk:
+    def __init__(self, width: float, height: float, index: float):
+        self.width = width
+        self.height = height
+        self.index = index
 
 class Tower:
-    def __init__(self, disks: typing.List = []):
+    def __init__(self, disks: typing.List[Disk] = []):
         self.disks = disks
 
     def pop(self, n: int = -1):
@@ -19,7 +24,6 @@ class Tower:
         Raises IndexError if list is empty or index is out of range.
         """
         return self.disks.pop(n)
-
 
 class Game:
     def __init__(
@@ -42,10 +46,14 @@ class Game:
             fps (float): The frames per second for the game loop.
         """
 
+
         self.logger = logger
         self.logger.info("Starting game")
 
         self.resolution = resolution
+        
+        # height - 150px
+        self.tower_height = resolution[1] - 150
 
         self.fps = fps
         self.delta_time = self.fps / 1000
@@ -58,7 +66,18 @@ class Game:
         self.set_disks(3)
 
     def set_disks(self, n: int) -> None:
-        self.towers = (Tower([x + 1 for x in range(n)]), Tower(), Tower())
+        diskHeight = self.tower_height / n
+        diskWidthMax = 200.0
+        diskWidthMin = 50.0
+        self.towers = (
+            Tower(
+                [Disk(
+                    utils.lerp(diskWidthMax, diskWidthMin, 1/(n-i)), diskHeight, n-i
+                ) for i in range(n)]
+            ),
+            Tower(),
+            Tower(),
+        )
 
     def start(self) -> None:
         """
