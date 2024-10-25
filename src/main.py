@@ -42,22 +42,27 @@ class Game:
 
         The `colorTop` and `colorBottom` parameters are the colors of the smallest and largest disks.
         Other colors will be linearly interpolated from them using `utils.generate_gradient`.
-
-        Args:
-            resolution (tuple[float, float]): The resolution of the game window. `(X, Y)`
-            logger (logging.Logger): The logger instance for logging game events.
-            fps (float): The frames per second for the game loop.
         """
 
         self.logger = logger
+        """
+        The logger instance for logging game events.
+        """
+
         self.logger.info("Starting game")
 
         self.resolution = resolution
+        """
+        The resolution of the game window. `(X, Y)`
+        """
 
         # height - 150px
         self.tower_height = resolution[1] - 150
 
         self.fps = fps
+        """
+        The frames per second for the game loop.
+        """
         self.delta_time = self.fps / 1000
 
         self.clock = pygame.time.Clock()
