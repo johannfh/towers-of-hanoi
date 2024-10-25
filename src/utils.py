@@ -78,9 +78,10 @@ class Queue[T]:
     def __init__(self):
         pass
 
-    def enqueue(self, item: T) -> None:
-        """Add a new item to the `Queue`"""
-        self.__items.append(item)
+    def enqueue(self, *items: T) -> None:
+        """Add new items to the `Queue`"""
+        for item in items:
+            self.__items.append(item)
 
     def dequeue(self) -> T:
         """Remove and return the next element in `Queue`.
@@ -95,3 +96,9 @@ class Queue[T]:
     def empty(self) -> bool:
         """Check if the `Queue` is empty."""
         return len(self.__items) == 0
+
+    def clear(self) -> typing.List[T]:
+        """Remove and return **ALL** items from the `Queue`."""
+        items = self.__items
+        self.__items = []
+        return items
