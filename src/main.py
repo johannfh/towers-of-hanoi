@@ -3,7 +3,7 @@ import typing
 
 import pygame
 
-from towers import Tower
+import towers
 import utils
 
 
