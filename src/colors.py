@@ -4,15 +4,23 @@ import typing
 from pygame import Color
 
 BLACK = Color(0, 0, 0)
+"""`#000000`"""
 WHITE = Color(255, 255, 255)
+"""`#ffffff`"""
 
 RED = Color(255, 0, 0)
+"""`#ff0000`"""
 GREEN = Color(0, 255, 0)
+"""`#00ff00`"""
 BLUE = Color(0, 0, 255)
+"""`#0000ff`"""
 
 YELLOW = Color(255, 255, 0)
+"""`#ffff00`"""
 CYAN = Color(0, 255, 255)
+"""`#00ffff`"""
 PURPLE = Color(255, 0, 255)
+"""`#ff00ff`"""
 
 
 def generate_gradient(origin: Color, target: Color, n: int) -> typing.List[Color]:

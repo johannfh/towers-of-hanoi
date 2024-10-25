@@ -3,7 +3,7 @@ import typing
 
 import pygame
 
-import towers
+from button import Button
 import colors
 import utils
 
@@ -16,7 +16,10 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 """The logger instance for logging game events."""
 
-resolution: typing.Tuple[float, float] = (1080, 720)
+SCREEN_WIDTH = 1080
+SCREEN_HEIGHT = 720
+
+resolution: typing.Tuple[float, float] = (SCREEN_WIDTH, SCREEN_HEIGHT)
 """The `(width, height)` resolution for the game."""
 
 disk_colors = (
@@ -29,9 +32,6 @@ Other colors will be linearly interpolated from them using `utils.generate_gradi
 
 fps: float = 60
 """Frames per second"""
-
-resolution = resolution
-"""The resolution of the game window. `(X, Y)`"""
 
 # height - 150px
 tower_height = resolution[1] - 150
@@ -57,19 +57,31 @@ pygame.init()
 window = pygame.display.set_mode(size=resolution)
 pygame.display.set_caption(project_name)
 
-circle_position = utils.get_center(window)
-
 ###############
 # load assets #
 ###############
 
 
 def from_assets(path: str) -> str:
-    return f"../assets/{path}"
+    return f"assets/{path}"
 
-# NOTE: missing right now
-# incr_button_img = pygame.image.load(from_assets("images/increment_button.png"))
-# decr_button_img = pygame.image.load(from_assets("images/decrement_button.png"))
+
+incr_button_img = pygame.image.load(from_assets("images/increment_button.png"))
+decr_button_img = pygame.image.load(from_assets("images/decrement_button.png"))
+
+incr_button = Button(
+    x=50,
+    y=50,
+    image=incr_button_img,
+    name="IncrementButton"
+)
+
+decr_button = Button(
+    x=SCREEN_WIDTH - 50 - incr_button_img.get_width(),
+    y=50,
+    image=decr_button_img,
+    name="DecrementButton"
+)
 
 #############
 # game loop #
@@ -84,21 +96,12 @@ while running:
             running = False
 
     # update screen
-    window.fill(color="#000000")
+    window.fill(color=colors.WHITE)
 
-    pygame.draw.circle(
-        surface=window,
-        color="red",
-        center=circle_position,
-        radius=40,
-    )
-
-    mouse_pos = utils.get_mouse_position()
-
-    # circle_position = circle_position.lerp(pygame.Vector2(mouse_pos[0], mouse_pos[1]), 0.1)
-    # print(circle_position.distance_to(mouse_pos))
-
-    circle_position.move_towards_ip(mouse_pos, 10)
+    if incr_button.draw(window):
+        logger.info("INCREMENT")
+    if decr_button.draw(window):
+        logger.info("DECREMENT")
 
     # apply screen changes
     pygame.display.flip()
