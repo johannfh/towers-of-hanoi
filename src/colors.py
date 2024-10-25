@@ -24,7 +24,11 @@ PURPLE = Color(255, 0, 255)
 
 
 def generate_gradient(origin: Color, target: Color, n: int) -> typing.List[Color]:
-    assert n >= 2, "n is too small"
+    assert n >= 0, "n must not be negative"
+    if n == 0:
+        return []
+    if n == 1:
+        return [origin]
 
     step = 1 / (n - 1)
     return [origin.lerp(target, step * i) for i in range(0, n)]
