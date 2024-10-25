@@ -7,11 +7,13 @@ import pygame
 
 import utils
 
+
 class Disk:
     def __init__(self, width: float, height: float, index: float):
         self.width = width
         self.height = height
         self.index = index
+
 
 class Tower:
     def __init__(self, disks: typing.List[Disk] = []):
@@ -24,6 +26,7 @@ class Tower:
         Raises IndexError if list is empty or index is out of range.
         """
         return self.disks.pop(n)
+
 
 class Game:
     def __init__(
@@ -46,12 +49,11 @@ class Game:
             fps (float): The frames per second for the game loop.
         """
 
-
         self.logger = logger
         self.logger.info("Starting game")
 
         self.resolution = resolution
-        
+
         # height - 150px
         self.tower_height = resolution[1] - 150
 
@@ -71,9 +73,14 @@ class Game:
         diskWidthMin = 50.0
         self.towers = (
             Tower(
-                [Disk(
-                    utils.lerp(diskWidthMax, diskWidthMin, 1/(n-i)), diskHeight, n-i
-                ) for i in range(n)]
+                [
+                    Disk(
+                        utils.lerp(diskWidthMax, diskWidthMin, 1 / (n - i)),
+                        diskHeight,
+                        n - i,
+                    )
+                    for i in range(n)
+                ]
             ),
             Tower(),
             Tower(),
@@ -129,11 +136,10 @@ class Game:
 
 
 if __name__ == "__main__":
-    # TODO: Make this work
     logger = logging.getLogger(__name__)
 
     # TODO: Maybe make this dependant on a flag
-    logger.setLevel(logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG)
 
     game = Game(
         logger=logger,
