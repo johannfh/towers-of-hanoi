@@ -1,5 +1,4 @@
 import logging
-import typing
 
 import pygame
 
@@ -21,8 +20,10 @@ LOG_FPS = False
 SCREEN_WIDTH = 1080
 SCREEN_HEIGHT = 720
 
-resolution: typing.Tuple[float, float] = (SCREEN_WIDTH, SCREEN_HEIGHT)
-"""The `(width, height)` resolution for the game."""
+TOOLBAR_HEIGHT = 150
+
+pygame.font.init()
+default_font = pygame.font.SysFont("Arial", 30)
 
 disk_colors = (
     pygame.color.Color(200, 50, 0),
@@ -36,8 +37,11 @@ fps: float = 60
 """Frames per second"""
 
 # height - 150px
-tower_height = resolution[1] - 150
+tower_height = SCREEN_HEIGHT - TOOLBAR_HEIGHT + 50
 """The height of the towers"""
+
+disks = 3
+"""Number of disks"""
 
 fps = fps
 """The frames per second for the game loop. """
@@ -56,7 +60,7 @@ clock = pygame.time.Clock()
 ##################
 
 pygame.init()
-screen = pygame.display.set_mode(size=resolution)
+screen = pygame.display.set_mode(size=(SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption(project_name)
 
 ###############
@@ -75,14 +79,14 @@ incr_button = Button(
     x=50,
     y=50,
     image=incr_button_img,
-    name="IncrementButton",
+    name="IncrementDisksButton",
 )
 
 decr_button = Button(
     x=SCREEN_WIDTH - 50 - incr_button_img.get_width(),
     y=50,
     image=decr_button_img,
-    name="DecrementButton",
+    name="DecrementDisksButton",
 )
 
 
@@ -103,9 +107,20 @@ while running:
     screen.fill(color=colors.WHITE)
 
     if incr_button.draw(screen):
-        logger.info("INCREMENT")
-    if decr_button.draw(screen):
-        logger.info("DECREMENT")
+        disks += 1
+        logger.info("set disks to %d", disks)
+
+    if decr_button.draw(screen) and disks > 0:
+        disks -= 1
+        logger.info("set disks to %d", disks)
+
+    disk_count_text = default_font.render(
+        f"Number of disks: {disks}", True, colors.BLACK
+    )
+    screen.blit(
+        disk_count_text,
+        (int(screen.get_width() / 2 - disk_count_text.get_width() / 2), 60),
+    )
 
     # apply screen changes
     pygame.display.flip()
