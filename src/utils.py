@@ -46,6 +46,29 @@ def create_timepassed(seconds: float):
     return has_passed
 
 
+class Comparable(typing.Protocol):
+    def __eq__(self, other: object) -> bool: ...
+    def __lt__(self, other: object) -> bool: ...
+    def __gt__(self, other: object) -> bool: ...
+
+    def __le__(self, other: object) -> bool:
+        return self < other or self == other
+
+    def __ge__(self, other: object) -> bool:
+        return self > other or self == other
+
+
+T = typing.TypeVar("T", bound=Comparable)
+
+
+def clamp(n: T, min: T, max: T):
+    if n < min:
+        return min
+    if n > max:
+        return max
+    return n
+
+
 class Queue[T]:
     """A really simple generic `Queue` implementation"""
 
