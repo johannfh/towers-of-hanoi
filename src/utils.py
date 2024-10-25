@@ -1,4 +1,5 @@
 import time
+import typing
 import pygame
 
 
@@ -24,7 +25,7 @@ def get_mouse_position() -> pygame.Vector2:
 
 
 def create_timepassed(seconds: float):
-    """ Creates a function that returns `True` if
+    """Creates a function that returns `True` if
     the time since the last call returning `True` is
     longer than `seconds`. Returns `False` otherwise."""
 
@@ -43,3 +44,31 @@ def create_timepassed(seconds: float):
         return False
 
     return has_passed
+
+
+class Queue[T]:
+    """A really simple generic `Queue` implementation"""
+
+    __items: typing.List[T] = []
+    """The items in the `Queue`. """
+
+    def __init__(self):
+        pass
+
+    def enqueue(self, item: T) -> None:
+        """Add a new item to the `Queue`"""
+        self.__items.append(item)
+
+    def dequeue(self) -> T:
+        """Remove and return the next element in `Queue`.
+        Raises `IndexError` if the `Queue` is empty."""
+        return self.__items.pop(0)
+
+    def peek(self) -> T:
+        """Return the next element in `Queue` without removing it.
+        Raises `IndexError` if the `Queue` is empty."""
+        return self.__items[0]
+
+    def empty(self) -> bool:
+        """Check if the `Queue` is empty."""
+        return len(self.__items) == 0

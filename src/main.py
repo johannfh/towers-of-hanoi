@@ -1,11 +1,11 @@
 import logging
-import math
 import time
 
 import pygame
 
 from button import Button
 import colors
+import towers_of_hanoi
 import utils
 
 project_name = "Towers of Hanoi"
@@ -91,6 +91,8 @@ decr_button = Button(
     name="DecrementDisksButton",
 )
 
+move_queue = utils.Queue[towers_of_hanoi.Move]()
+"""Remaining disk moves"""
 
 #############
 # game loop #
