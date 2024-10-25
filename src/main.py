@@ -28,8 +28,7 @@ disk_colors = (
 Other colors will be linearly interpolated from them using `utils.generate_gradient`. """
 
 fps: float = 60
-
-logger.info("Starting game")
+"""Frames per second"""
 
 resolution = resolution
 """The resolution of the game window. `(X, Y)`"""
@@ -64,6 +63,8 @@ circle_position = utils.get_center(window)
 #############
 # game loop #
 #############
+
+logger.info("Starting game")
 
 while running:
     # process events
