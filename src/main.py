@@ -76,17 +76,16 @@ class Game:
         diskHeight = self.tower_height / n
         diskWidthMax = 200.0
         diskWidthMin = 50.0
+        initial_disks = [
+            Disk(
+                width=utils.lerp(diskWidthMax, diskWidthMin, 1 / (n - i)),
+                height=diskHeight,
+                index=n - i,
+            )
+            for i in range(n)
+        ]
         self.towers = (
-            Tower(
-                [
-                    Disk(
-                        utils.lerp(diskWidthMax, diskWidthMin, 1 / (n - i)),
-                        diskHeight,
-                        n - i,
-                    )
-                    for i in range(n)
-                ]
-            ),
+            Tower(),
             Tower(),
             Tower(),
         )
