@@ -54,7 +54,7 @@ clock = pygame.time.Clock()
 ##################
 
 pygame.init()
-window = pygame.display.set_mode(size=resolution)
+screen = pygame.display.set_mode(size=resolution)
 pygame.display.set_caption(project_name)
 
 ###############
@@ -69,18 +69,13 @@ def from_assets(path: str) -> str:
 incr_button_img = pygame.image.load(from_assets("images/increment_button.png"))
 decr_button_img = pygame.image.load(from_assets("images/decrement_button.png"))
 
-incr_button = Button(
-    x=50,
-    y=50,
-    image=incr_button_img,
-    name="IncrementButton"
-)
+incr_button = Button(x=50, y=50, image=incr_button_img, name="IncrementButton")
 
 decr_button = Button(
     x=SCREEN_WIDTH - 50 - incr_button_img.get_width(),
     y=50,
     image=decr_button_img,
-    name="DecrementButton"
+    name="DecrementButton",
 )
 
 #############
@@ -96,11 +91,11 @@ while running:
             running = False
 
     # update screen
-    window.fill(color=colors.WHITE)
+    screen.fill(color=colors.WHITE)
 
-    if incr_button.draw(window):
+    if incr_button.draw(screen):
         logger.info("INCREMENT")
-    if decr_button.draw(window):
+    if decr_button.draw(screen):
         logger.info("DECREMENT")
 
     # apply screen changes
