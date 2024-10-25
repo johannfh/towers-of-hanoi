@@ -1,5 +1,6 @@
 import pygame
 import typing
+import constants
 import utils
 
 
@@ -9,13 +10,26 @@ class Disk:
     ):
         self.width = width
         self.height = height
+
         self.index = index
+
         self.color = color
+
+        self.left = (constants.DISK_WIDTH_MAX - self.width) / 2
+        """distance relative to the towers left"""
+
+        self.bottom = self.height * self.index
+        """distance relative to the towers bottom"""
 
 
 class Tower:
-    def __init__(self, disks: typing.List[Disk] = []):
+    def __init__(
+        self,
+        disk_height: float,
+        disks: typing.List[Disk] = [],
+    ):
         self.disks = disks
+        self.disk_height = disk_height
 
     def pop(self, n: int = -1):
         """
@@ -35,24 +49,28 @@ def generate_towers(
         len(disk_gradient) == disks
     ), f"Number of colors for the disks did not match the number of disks ({disks})"
 
-    disk_height = int(tower_height / disks)
-    DISK_WIDTH_MAX = 200
-    DISK_WIDTH_MIN = 100
-    DISK_HEIGHT_MAX = 30
+    disk_height = min(int(tower_height / disks), constants.DISK_HEIGHT_MAX)
 
-    initial_disks = [
-        Disk(
-            width=utils.lerp(DISK_WIDTH_MAX, DISK_WIDTH_MIN, 1 / (disks - i)),
-            height=min(disk_height, DISK_HEIGHT_MAX),
-            index=disks - i,
-            color=disk_gradient[i],
+    initial_disks = []
+
+    for i in range(disks):
+        initial_disks.append(
+            Disk(
+                width=utils.move_linear(
+                    constants.DISK_WIDTH_MAX, constants.DISK_WIDTH_MIN, disks, i
+                ),
+                height=disk_height,
+                index=i + 1,
+                color=disk_gradient[i],
+            )
         )
-        for i in range(disks)
-    ]
 
     towers = (
-        Tower(initial_disks),
-        Tower(),
-        Tower(),
+        Tower(
+            disks=initial_disks,
+            disk_height=disk_height,
+        ),
+        Tower(disk_height),
+        Tower(disk_height),
     )
     return towers

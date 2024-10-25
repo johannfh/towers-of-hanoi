@@ -69,6 +69,13 @@ def clamp(n: T, min: T, max: T):
     return n
 
 
+def move_linear(from_val: float, to_val: float, n: int, i: int) -> float:
+    """`n` should be `1` greater than `i` at the end"""
+
+    step_size = (to_val - from_val) / n
+    return from_val + step_size * i
+
+
 class Queue[T]:
     """A really simple generic `Queue` implementation"""
 
@@ -92,6 +99,10 @@ class Queue[T]:
         """Return the next element in `Queue` without removing it.
         Raises `IndexError` if the `Queue` is empty."""
         return self.__items[0]
+
+    def remaining(self) -> typing.List[T]:
+        """Return the remaining elements in `Queue` without removing it."""
+        return self.__items
 
     def empty(self) -> bool:
         """Check if the `Queue` is empty."""
