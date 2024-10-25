@@ -1,4 +1,6 @@
 import logging
+import math
+import time
 
 import pygame
 
@@ -94,7 +96,8 @@ decr_button = Button(
 # game loop #
 #############
 
-logger.info("Starting game")
+logger.info("Game starting")
+GAME_START = time.time()
 fpslog_timespan_passed = utils.create_timepassed(0.5)
 
 while running:
@@ -131,6 +134,7 @@ while running:
     if LOG_FPS and fpslog_timespan_passed():
         logger.debug("fps: %d", clock.get_fps())
 
-logger.info("Game exited")
+logger.info("Game exiting")
+logger.info("Game duration: %.3f seconds", time.time() - GAME_START)
 
 pygame.quit()
