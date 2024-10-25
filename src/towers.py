@@ -27,25 +27,26 @@ class Tower:
 
 
 def generate_towers(
+    disks: int,
     tower_height: int,
     disk_gradient: typing.List[pygame.color.Color],
 ) -> typing.Tuple[Tower, Tower, Tower]:
     assert (
-        len(disk_gradient) == tower_height
-    ), f"Number of colors for the disks did not match the number of disks ({tower_height})"
+        len(disk_gradient) == disks
+    ), f"Number of colors for the disks did not match the number of disks ({disks})"
 
-    disk_height = tower_height / tower_height
+    disk_height = int(tower_height / disks)
     DISK_WIDTH_MAX = 200
     DISK_WIDTH_MIN = 100
 
     initial_disks = [
         Disk(
-            width=utils.lerp(DISK_WIDTH_MAX, DISK_WIDTH_MIN, 1 / (tower_height - i)),
+            width=utils.lerp(DISK_WIDTH_MAX, DISK_WIDTH_MIN, 1 / (disks - i)),
             height=disk_height,
-            index=tower_height - i,
+            index=disks - i,
             color=disk_gradient[i],
         )
-        for i in range(tower_height)
+        for i in range(disks)
     ]
 
     towers = (
