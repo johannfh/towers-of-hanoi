@@ -3,7 +3,14 @@ import pygame
 
 
 def lerp(source: float, dest: float, weight: float) -> float:
-    assert weight >= 0 and weight <= 1, "weight has to be between 0 and 1"
+    LOWER = 0
+    UPPER = 1
+
+    # prevent weird effects if `source` or `dest` is out of bounds
+    if weight < LOWER:
+        return source
+    if weight > UPPER:
+        return dest
 
     return source + (dest - source) * weight
 
