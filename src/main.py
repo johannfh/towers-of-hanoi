@@ -16,6 +16,8 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 """The logger instance for logging game events."""
 
+LOG_FPS = False
+
 SCREEN_WIDTH = 1080
 SCREEN_HEIGHT = 720
 
@@ -111,7 +113,7 @@ while running:
     # calculate deltatime
     delta_time = clock.tick(fps) / 1000
 
-    if fpslog_timespan_passed():
+    if LOG_FPS and fpslog_timespan_passed():
         logger.debug("fps: %d", clock.get_fps())
 
 logger.info("Game exited")
