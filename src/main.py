@@ -1,11 +1,11 @@
 import logging
+import time
 import typing
 
 import pygame
 
 from button import Button
 import colors
-import utils
 
 project_name = "Towers of Hanoi"
 """Name of this project"""
@@ -78,11 +78,27 @@ decr_button = Button(
     name="DecrementButton",
 )
 
+
+def create_timepassed(seconds: float):
+    last_has_passed = time.time()
+
+    def has_passed() -> bool:
+        nonlocal last_has_passed
+        current_time = time.time()
+        if current_time - last_has_passed >= seconds:
+            last_has_passed = time.time()
+            return True
+        return False
+
+    return has_passed
+
+
 #############
 # game loop #
 #############
 
 logger.info("Starting game")
+fpslog_timespan_passed = create_timepassed(0.5)
 
 while running:
     # process events
@@ -103,6 +119,9 @@ while running:
 
     # calculate deltatime
     delta_time = clock.tick(fps) / 1000
+
+    if fpslog_timespan_passed():
+        logger.debug("fps: %d", clock.get_fps())
 
 logger.info("Game exited")
 
