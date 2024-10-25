@@ -1,8 +1,6 @@
 import logging
 import typing
 
-# from towers_of_hanoi import towers_of_hanoi
-
 import pygame
 
 from towers import Tower

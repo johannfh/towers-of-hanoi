@@ -25,6 +25,7 @@ class Tower:
         """
         return self.disks.pop(n)
 
+
 def generate_towers(
     tower_height: int,
     disk_gradient: typing.List[pygame.color.Color],
