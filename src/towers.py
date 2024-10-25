@@ -35,11 +35,12 @@ def generate_towers(
     ), f"Number of colors for the disks did not match the number of disks ({tower_height})"
 
     disk_height = tower_height / tower_height
-    disk_width_max = 200.0
-    disk_width_min = 50.0
+    DISK_WIDTH_MAX = 200
+    DISK_WIDTH_MIN = 100
+
     initial_disks = [
         Disk(
-            width=utils.lerp(disk_width_max, disk_width_min, 1 / (tower_height - i)),
+            width=utils.lerp(DISK_WIDTH_MAX, DISK_WIDTH_MIN, 1 / (tower_height - i)),
             height=disk_height,
             index=tower_height - i,
             color=disk_gradient[i],
