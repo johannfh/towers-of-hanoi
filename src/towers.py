@@ -38,11 +38,12 @@ def generate_towers(
     disk_height = int(tower_height / disks)
     DISK_WIDTH_MAX = 200
     DISK_WIDTH_MIN = 100
+    DISK_HEIGHT_MAX = 30
 
     initial_disks = [
         Disk(
             width=utils.lerp(DISK_WIDTH_MAX, DISK_WIDTH_MIN, 1 / (disks - i)),
-            height=disk_height,
+            height=min(disk_height, DISK_HEIGHT_MAX),
             index=disks - i,
             color=disk_gradient[i],
         )
