@@ -49,9 +49,6 @@ running = True
 clock = pygame.time.Clock()
 """Clock for game sync"""
 
-font = pygame.font.Font(None, 24)
-"""Global default font"""
-
 ##################
 # pre game setup #
 ##################
@@ -70,9 +67,9 @@ circle_position = utils.get_center(window)
 def from_assets(path: str) -> str:
     return f"../assets/{path}"
 
-
-incr_button_img = pygame.image.load(from_assets("images/increment_button.png"))
-decr_button_img = pygame.image.load(from_assets("images/decrement_button.png"))
+# NOTE: missing right now
+# incr_button_img = pygame.image.load(from_assets("images/increment_button.png"))
+# decr_button_img = pygame.image.load(from_assets("images/decrement_button.png"))
 
 #############
 # game loop #
