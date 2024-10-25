@@ -69,7 +69,12 @@ def from_assets(path: str) -> str:
 incr_button_img = pygame.image.load(from_assets("images/increment_button.png"))
 decr_button_img = pygame.image.load(from_assets("images/decrement_button.png"))
 
-incr_button = Button(x=50, y=50, image=incr_button_img, name="IncrementButton")
+incr_button = Button(
+    x=50,
+    y=50,
+    image=incr_button_img,
+    name="IncrementButton",
+)
 
 decr_button = Button(
     x=SCREEN_WIDTH - 50 - incr_button_img.get_width(),
