@@ -4,6 +4,7 @@ import typing
 import pygame
 
 import towers
+import colors
 import utils
 
 
@@ -11,59 +12,55 @@ import utils
 logging.basicConfig(level=logging.DEBUG)
 
 logger = logging.getLogger(__name__)
-"""
-The logger instance for logging game events.
-"""
+"""The logger instance for logging game events."""
 
 resolution: typing.Tuple[float, float] = (1080, 720)
-"""
-The `(width, height)` resolution for the game.
-"""
+"""The `(width, height)` resolution for the game."""
 
 disk_colors = (
     pygame.color.Color(200, 50, 0),
     pygame.color.Color(50, 0, 200),
 )
-"""
-disk_colors: tuple(colorTop, colorBottom)
-
+"""disk_colors: tuple(colorTop, colorBottom)\n
 `colorTop` and `colorBottom` are the colors of the smallest and largest disks.
-Other colors will be linearly interpolated from them using `utils.generate_gradient`.
-"""
+Other colors will be linearly interpolated from them using `utils.generate_gradient`. """
 
 fps: float = 60
 
 logger.info("Starting game")
 
 resolution = resolution
-"""
-The resolution of the game window. `(X, Y)`
-"""
+"""The resolution of the game window. `(X, Y)`"""
 
 # height - 150px
 tower_height = resolution[1] - 150
+"""The height of the towers"""
 
 fps = fps
-"""
-The frames per second for the game loop.
-"""
+"""The frames per second for the game loop. """
 
 delta_time = 0
-"""
-The time that passed between each frame
-"""
+"""The time that passed between each frame"""
 
 running = True
-"""
-Game loop state
-"""
+"""Game loop state"""
+
+clock = pygame.time.Clock()
+"""Clock for game sync"""
+
+##################
+# pre game setup #
+##################
 
 pygame.init()
 window = pygame.display.set_mode(size=resolution)
 
 circle_position = utils.get_center(window)
 
-clock = pygame.time.Clock()
+
+#############
+# game loop #
+#############
 
 while running:
     # process events
