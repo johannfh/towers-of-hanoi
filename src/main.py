@@ -62,6 +62,17 @@ pygame.display.set_caption(project_name)
 
 circle_position = utils.get_center(window)
 
+###############
+# load assets #
+###############
+
+
+def from_assets(path: str) -> str:
+    return f"../assets/{path}"
+
+
+incr_button_img = pygame.image.load(from_assets("images/increment_button.png"))
+decr_button_img = pygame.image.load(from_assets("images/decrement_button.png"))
 
 #############
 # game loop #
@@ -99,4 +110,5 @@ while running:
     delta_time = clock.tick(fps) / 1000
 
 logger.info("Game exited")
+
 pygame.quit()

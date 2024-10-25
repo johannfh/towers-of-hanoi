@@ -20,3 +20,13 @@ def generate_gradient(origin: Color, target: Color, n: int) -> typing.List[Color
 
     step = 1 / (n - 1)
     return [origin.lerp(target, step * i) for i in range(0, n)]
+
+
+def invert(color: Color) -> Color:
+    """Inverts a color, e.g. `#000000` -> `#ffffff`"""
+
+    return Color(
+        r=255 - color.r,
+        g=255 - color.g,
+        b=255 - color.b,
+    )
