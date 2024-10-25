@@ -49,6 +49,9 @@ running = True
 clock = pygame.time.Clock()
 """Clock for game sync"""
 
+font = pygame.font.Font(None, 24)
+"""Global default font"""
+
 ##################
 # pre game setup #
 ##################
