@@ -16,6 +16,9 @@ class Button:
     pressed: bool = False
     """`True` when button is pressed"""
 
+    hover: bool = False
+    """`True` when mouse is over button"""
+
     name: str = uuid.uuid4().__str__()
     """Name of this button, usually used for debugging"""
 
@@ -37,8 +40,11 @@ class Button:
     def set_position(self, x: int | None, y: int | None):
         """Updates coordinates if not `None`"""
         self.rect.topleft = (x or self.rect.x, y or self.rect.y)
-        logger.info(
-            "%s position set to x=%d y=%d", self.__class__, self.rect.x, self.rect.y
+        logger.debug(
+            '%s "%s" position set to %s',
+            self.__class__.__name__,
+            self.name,
+            self.rect.topleft,
         )
 
     def get_position(self) -> typing.Tuple[int, int]:
@@ -47,21 +53,46 @@ class Button:
     def draw(self, surface: pygame.Surface) -> bool:
         action = False
 
-        position = pygame.mouse.get_pos()
+        mouse_position = pygame.mouse.get_pos()
 
-        if self.rect.collidepoint(position):
+        if not self.hover and self.rect.collidepoint(mouse_position):
             logger.debug(
-                '%s hovering over "%s" mouse at (%d, %d)',
+                '%s "%s" mouse over at %s',
                 self.__class__.__name__,
                 self.name,
-                pygame.mouse.get_pos()[0],
-                pygame.mouse.get_pos()[1],
+                pygame.mouse.get_pos(),
             )
-            if pygame.mouse.get_pressed()[0] == True and self.pressed == False:
-                self.pressed = True
-                action = True
+            self.hover = True
 
-        if pygame.mouse.get_pressed()[0] == False:
+        if self.hover and not self.rect.collidepoint(mouse_position):
+            logger.debug(
+                '%s "%s" mouse out at %s',
+                self.__class__.__name__,
+                self.name,
+                pygame.mouse.get_pos(),
+            )
+            self.hover = False
+
+        left_click = pygame.mouse.get_pressed()[0]
+
+        if not self.pressed and left_click and self.hover:
+            logger.debug(
+                '%s "%s" pressed mouse at %s',
+                self.__class__.__name__,
+                self.name,
+                pygame.mouse.get_pos(),
+            )
+
+            self.pressed = True
+            action = True
+
+        if self.pressed and not left_click:
+            logger.debug(
+                '%s "%s" released mouse at %s',
+                self.__class__.__name__,
+                self.name,
+                pygame.mouse.get_pos(),
+            )
             self.pressed = False
 
         surface.blit(self.image, (self.rect.x, self.rect.y))
