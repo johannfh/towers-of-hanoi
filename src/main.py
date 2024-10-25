@@ -119,7 +119,7 @@ while running:
     )
     screen.blit(
         disk_count_text,
-        (int(screen.get_width() / 2 - disk_count_text.get_width() / 2), 60),
+        (screen.get_width() / 2 - disk_count_text.get_width() / 2, 60),
     )
 
     # apply screen changes
