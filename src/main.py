@@ -7,6 +7,8 @@ import towers
 import colors
 import utils
 
+project_name = "Towers of Hanoi"
+"""Name of this project"""
 
 # TODO: Maybe make this dependant on a flag
 logging.basicConfig(level=logging.DEBUG)
@@ -54,6 +56,7 @@ clock = pygame.time.Clock()
 
 pygame.init()
 window = pygame.display.set_mode(size=resolution)
+pygame.display.set_caption(project_name)
 
 circle_position = utils.get_center(window)
 
