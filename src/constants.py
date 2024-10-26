@@ -3,6 +3,10 @@ import pygame
 PROJECT_NAME = "Towers of Hanoi"
 """Name of this project"""
 
+SOURCE_TOWER = 0
+AUXILARY_TOWER = 1
+DESTINATION_TOWER = 2
+
 LOG_FPS = False
 
 SCREEN_WIDTH = 800
@@ -36,7 +40,8 @@ DISK_COLORS = (
     pygame.color.Color(50, 0, 200),
     pygame.color.Color(200, 50, 0),
 )
-"""disk_colors: tuple(colorTop, colorBottom)\n
+"""disk_colors: `tuple(colorTop, colorBottom)`
+
 `colorTop` and `colorBottom` are the colors of the smallest and largest disks.
 Other colors will be linearly interpolated from them using `utils.generate_gradient`. """
 
