@@ -45,10 +45,3 @@ def towers_of_hanoi(
             moves.append(i)
 
     return moves
-
-if __name__ == "__main__":
-    n = 4
-    source = 0
-    destination = 1
-    auxilary = 2
-    print_moves(towers_of_hanoi(n, source, destination, auxilary))
