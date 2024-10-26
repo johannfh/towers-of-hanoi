@@ -10,7 +10,7 @@ DESTINATION_TOWER = 2
 LOG_FPS = False
 
 SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_HEIGHT = 650
 
 TOOLBAR_HEIGHT = 50
 
@@ -47,7 +47,7 @@ Other colors will be linearly interpolated from them using `utils.generate_gradi
 
 MIN_DISKS = 1
 """Minimum number of disks"""
-MAX_DISKS = 10
+MAX_DISKS = 25
 """Maximum number of disks"""
 
 FPS = 60

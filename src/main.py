@@ -47,7 +47,7 @@ disks = 3
 # animation_duration = 5
 # """Time to complete the animation in (in `Seconds`)"""
 
-disk_speed: typing.Callable[[], float] = lambda: 500
+disk_speed: typing.Callable[[], float] = lambda: 1500
 """Should generally be multiplied by `delta_time` when used"""
 # disk_speed = lambda: 2 ^ disks - 1
 # """Speed in which the disk should move"""

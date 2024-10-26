@@ -1,3 +1,4 @@
+import functools
 import typing
 
 class Move:
@@ -15,6 +16,7 @@ def print_moves(moves: typing.List[Move]) -> None:
     for move in moves:
         print(move)
 
+@functools.cache
 def towers_of_hanoi(
     n: int, source: int, destination: int, auxilary: int
 ) -> typing.List[Move]:
