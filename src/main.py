@@ -308,8 +308,8 @@ while running:
                 # x
                 TOWER_POSITIONS[current_move.source][0] + disk.left,
                 # y
-                TOWER_POSITIONS[current_move.destination][1]
-                - (len(target_tower.disks)) * target_tower.disk_height,
+                TOWER_POSITIONS[current_move.source][1]
+                - (len(source_tower.disks)) * source_tower.disk_height,
             )
 
             target_position: typing.Tuple[float, float] = (
