@@ -10,6 +10,7 @@ from constants import (
     AUXILARY_TOWER,
     DESTINATION_TOWER,
     DISK_COLORS,
+    DISK_SPEED,
     FONT_FAMILY,
     FONT_SIZE,
     LOG_FPS,
@@ -25,6 +26,7 @@ from constants import (
     FPS,
 )
 import towers
+from towers import MovingDisk
 import towers_of_hanoi
 import utils
 
@@ -34,11 +36,22 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 """The logger instance for logging game events."""
 
+disks = 3
+"""Number of disks"""
+
 move_queue: utils.Queue[towers_of_hanoi.Move] = utils.Queue()
 """Remaining disk moves"""
 
-disks = 3
-"""Number of disks"""
+
+move_queue.enqueue(
+    *towers_of_hanoi.towers_of_hanoi(
+        disks,
+        SOURCE_TOWER,
+        DESTINATION_TOWER,
+        AUXILARY_TOWER,
+    )
+)
+
 
 # TODO: Calculate disk_speed from animation_duration
 # so animation speed increases when there are more disks
@@ -46,47 +59,8 @@ disks = 3
 # animation_duration = 5
 # """Time to complete the animation in (in `Seconds`)"""
 
-disk_speed: typing.Callable[[], float] = lambda: 1500
+disk_speed: typing.Callable[[], float] = lambda: DISK_SPEED
 """Should generally be multiplied by `delta_time` when used"""
-# disk_speed = lambda: 2 ^ disks - 1
-# """Speed in which the disk should move"""
-
-
-class MovingDisk:
-    def __init__(
-        self,
-        position: pygame.Vector2 | None,
-        target_position: pygame.Vector2 | None,
-        disk: towers.Disk | None,
-    ):
-        self.position: pygame.Vector2 = position or pygame.Vector2(0, 0)
-        """Current position of the disk on screen (bottom left)"""
-        self.target_position: pygame.Vector2 = target_position or pygame.Vector2(0, 0)
-        """Position the disk is moving towards (bottom left)"""
-        self.disk: towers.Disk | None = disk
-        """Disk which is currently being moved"""
-
-    def reset(self):
-        self.disk = None
-        self.position = pygame.Vector2(0, 0)
-        self.target_position = pygame.Vector2(0, 0)
-
-    def reached_target(self) -> bool:
-        return self.position == self.target_position
-
-    def insert(
-        self,
-        disk: towers.Disk,
-        position: pygame.Vector2,
-        target: pygame.Vector2,
-    ):
-        self.disk = disk
-        self.position = position
-        self.target_position = target
-
-    def next_position(self, speed: float) -> pygame.Vector2:
-        return self.position.move_towards(self.target_position, speed)
-
 
 moving_disk_data: MovingDisk = MovingDisk(
     position=pygame.Vector2(0, 0),
@@ -101,20 +75,10 @@ current_move: towers_of_hanoi.Move | None = None
 solve_towers = False
 """`True` if solving is in progress"""
 
-
 hanoi_towers = towers.generate_towers(
     disks, colors.generate_gradient(DISK_COLORS[0], DISK_COLORS[1], disks)
 )
 """(`source`, `target`, `destination`)"""
-
-move_queue.enqueue(
-    *towers_of_hanoi.towers_of_hanoi(
-        disks,
-        SOURCE_TOWER,
-        DESTINATION_TOWER,
-        AUXILARY_TOWER,
-    )
-)
 
 
 def update_disks(transform: typing.Callable[[int], int]):
@@ -158,6 +122,15 @@ def set_disks(n: int):
     update_disks(lambda _: n)
 
 
+def towers_solved() -> bool:
+    """Checks if the problem is solved"""
+    return (
+        len(hanoi_towers[0].disks) == 0
+        and len(hanoi_towers[1].disks) == 0
+        and len(hanoi_towers[2].disks) == disks
+    )
+
+
 ##################
 # pre game setup #
 ##################
@@ -171,10 +144,16 @@ running = True
 clock = pygame.time.Clock()
 """Clock for game sync"""
 
+#####################
+# initialize pygame #
+#####################
 
 pygame.init()
 screen = pygame.display.set_mode(size=(SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption(PROJECT_NAME)
+
+pygame.font.init()
+font = pygame.font.SysFont(FONT_FAMILY, FONT_SIZE)
 
 ###############
 # load assets #
@@ -188,39 +167,10 @@ def from_assets(path: str) -> str:
 incr_button_img = pygame.image.load(from_assets("images/increment_button.png"))
 decr_button_img = pygame.image.load(from_assets("images/decrement_button.png"))
 
-incr_button = button.Button(
-    x=MARGIN_HORIZONTAL,
-    y=MARGIN_VERTICAL,
-    image=incr_button_img,
-    name="IncrementDisksButton",
-)
-
-decr_button = button.Button(
-    x=SCREEN_WIDTH - MARGIN_HORIZONTAL - incr_button_img.get_width(),
-    y=MARGIN_VERTICAL,
-    image=decr_button_img,
-    name="DecrementDisksButton",
-)
-
-pygame.font.init()
-
-font = pygame.font.SysFont(FONT_FAMILY, FONT_SIZE)
-
-solve_text = font.render("Solve!", True, colors.BLACK)
-solve_button = button.Button(
-    x=int(screen.get_width() / 2 - solve_text.get_width() / 2),
-    y=MARGIN_VERTICAL + FONT_SIZE,
-    image=solve_text,
-    name="SolveHanoiButton",
-)
 
 #############
 # game loop #
 #############
-
-logger.info("Game starting")
-GAME_START = time.time()
-fpslog_timespan_passed = utils.create_timepassed(0.5)
 
 
 def draw_towers():
@@ -250,21 +200,39 @@ def draw_moving_disk():
     pygame.draw.rect(screen, disk.color, disk_rect)
 
 
+logger.info("Game starting")
+GAME_START = time.time()
+fpslog_timespan_passed = utils.create_timepassed(0.5)
+
 for i in range(len(TOWER_POSITIONS)):
     pos = TOWER_POSITIONS[i]
-    logger.info(f"{i} ({pos[0]}, {pos[1]})")
+    logger.info(f"Tower {i} bottomleft=({pos[0]}, {pos[1]})")
 
 for disk in hanoi_towers[0].disks:
     logger.info(f"Disk {disk.index} margin-left={disk.left} margin-right={disk.bottom}")
 
+solve_text = font.render("Solve!", True, colors.BLACK)
 
-def towers_solved() -> bool:
-    return (
-        len(hanoi_towers[0].disks) == 0
-        and len(hanoi_towers[1].disks) == 0
-        and len(hanoi_towers[2].disks) == disks
-    )
+solve_button = button.Button(
+    x=int(screen.get_width() / 2 - solve_text.get_width() / 2),
+    y=MARGIN_VERTICAL + FONT_SIZE,
+    image=solve_text,
+    name="SolveHanoiButton",
+)
 
+incr_button = button.Button(
+    x=MARGIN_HORIZONTAL,
+    y=MARGIN_VERTICAL,
+    image=incr_button_img,
+    name="IncrementDisksButton",
+)
+
+decr_button = button.Button(
+    x=SCREEN_WIDTH - MARGIN_HORIZONTAL - incr_button_img.get_width(),
+    y=MARGIN_VERTICAL,
+    image=decr_button_img,
+    name="DecrementDisksButton",
+)
 
 while running:
     # process events

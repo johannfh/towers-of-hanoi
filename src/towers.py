@@ -1,6 +1,7 @@
 import pygame
 import typing
 import constants
+import towers
 import utils
 
 
@@ -69,3 +70,43 @@ def generate_towers(
         Tower(disks=None, disk_height=disk_height),
     )
     return towers
+
+
+# disk_speed = lambda: 2 ^ disks - 1
+# """Speed in which the disk should move"""
+
+
+class MovingDisk:
+    def __init__(
+        self,
+        position: pygame.Vector2 | None,
+        target_position: pygame.Vector2 | None,
+        disk: towers.Disk | None,
+    ):
+        self.position: pygame.Vector2 = position or pygame.Vector2(0, 0)
+        """Current position of the disk on screen (bottom left)"""
+        self.target_position: pygame.Vector2 = target_position or pygame.Vector2(0, 0)
+        """Position the disk is moving towards (bottom left)"""
+        self.disk: towers.Disk | None = disk
+        """Disk which is currently being moved"""
+
+    def reset(self):
+        self.disk = None
+        self.position = pygame.Vector2(0, 0)
+        self.target_position = pygame.Vector2(0, 0)
+
+    def reached_target(self) -> bool:
+        return self.position == self.target_position
+
+    def insert(
+        self,
+        disk: towers.Disk,
+        position: pygame.Vector2,
+        target: pygame.Vector2,
+    ):
+        self.disk = disk
+        self.position = position
+        self.target_position = target
+
+    def next_position(self, speed: float) -> pygame.Vector2:
+        return self.position.move_towards(self.target_position, speed)
