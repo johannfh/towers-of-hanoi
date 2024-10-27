@@ -53,43 +53,45 @@ disk_speed: typing.Callable[[], float] = lambda: 1500
 # """Speed in which the disk should move"""
 
 
-@dataclasses.dataclass
 class MovingDisk:
-    position: typing.Tuple[float, float]
-    """`(x: float, y: float)`"""
-    disk: towers.Disk | None
-    """Disk which is currently being moved"""
-    target_pos: typing.Tuple[float, float]
-    """`(x: float, y: float)`"""
+    def __init__(
+        self,
+        position: pygame.Vector2 | None,
+        target_position: pygame.Vector2 | None,
+        disk: towers.Disk | None,
+    ):
+        self.position: pygame.Vector2 = position or pygame.Vector2(0, 0)
+        """Current position of the disk on screen (bottom left)"""
+        self.target_position: pygame.Vector2 = target_position or pygame.Vector2(0, 0)
+        """Position the disk is moving towards (bottom left)"""
+        self.disk: towers.Disk | None = disk
+        """Disk which is currently being moved"""
 
     def reset(self):
         self.disk = None
-        self.position = (0, 0)
-        self.target_pos = (0, 0)
+        self.position = pygame.Vector2(0, 0)
+        self.target_position = pygame.Vector2(0, 0)
 
     def reached_target(self) -> bool:
-        return self.position == self.target_pos
+        return self.position == self.target_position
 
     def insert(
         self,
         disk: towers.Disk,
-        position: typing.Tuple[float, float],
-        target: typing.Tuple[float, float],
+        position: pygame.Vector2,
+        target: pygame.Vector2,
     ):
         self.disk = disk
         self.position = position
-        self.target_pos = target
+        self.target_position = target
 
-    def next_position(self, speed: float) -> typing.Tuple[float, float]:
-        current = pygame.Vector2(self.position)
-        target = pygame.Vector2(self.target_pos)
-        next_position = current.move_towards(target, speed)
-        return (next_position.x, next_position.y)
+    def next_position(self, speed: float) -> pygame.Vector2:
+        return self.position.move_towards(self.target_position, speed)
 
 
 moving_disk_data: MovingDisk = MovingDisk(
-    position=(0, 0),
-    target_pos=(0, 0),
+    position=pygame.Vector2(0, 0),
+    target_position=pygame.Vector2(0, 0),
     disk=None,
 )
 """Contains data related to the current disk being moved"""
@@ -249,11 +251,12 @@ def draw_moving_disk():
     pygame.draw.rect(screen, disk.color, disk_rect)
 
 
-for pos in TOWER_POSITIONS:
-    print(f"({pos[0]}, {pos[1]})")
+for i in range(len(TOWER_POSITIONS)):
+    pos = TOWER_POSITIONS[i]
+    logger.info(f"{i} ({pos[0]}, {pos[1]})")
 
 for disk in hanoi_towers[0].disks:
-    print(disk.index, disk.left, disk.bottom)
+    logger.info(f"Disk {disk.index} margin-left={disk.left} margin-right={disk.bottom}")
 
 
 def towers_solved() -> bool:
@@ -282,7 +285,7 @@ while running:
         logger.info("set disks to %d", disks)
 
     if solve_button.draw(screen):
-        set_disks(disks) # regenerate towers
+        set_disks(disks)  # regenerate towers
         logger.info("solving towers")
         solve_towers = True
 
@@ -304,15 +307,13 @@ while running:
             disk = source_tower.disks.pop()
 
             # save current disk position
-            disk_position: typing.Tuple[float, float] = (
-                # x
+            disk_position = pygame.Vector2(
                 TOWER_POSITIONS[current_move.source][0] + disk.left,
-                # y
                 TOWER_POSITIONS[current_move.source][1]
                 - (len(source_tower.disks)) * source_tower.disk_height,
             )
 
-            target_position: typing.Tuple[float, float] = (
+            target_position = pygame.Vector2(
                 TOWER_POSITIONS[current_move.destination][0] + disk.left,
                 TOWER_POSITIONS[current_move.destination][1]
                 - (len(target_tower.disks)) * target_tower.disk_height,
