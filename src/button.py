@@ -19,16 +19,17 @@ class Button:
     hover: bool = False
     """`True` when mouse is over button"""
 
-    name: str = uuid.uuid4().__str__()
+    name: str
     """Name of this button, usually used for debugging"""
 
     def __init__(
         self, x: int, y: int, image: pygame.Surface, name: str | None, scale: float = 1
     ):
-        self.name = name if name else self.name
+        self.name = name if name else uuid.uuid4().__str__()
 
         width = image.get_width()
         height = image.get_height()
+
         self.image = pygame.transform.scale(
             image, (int(width * scale), int(height * scale))
         )
