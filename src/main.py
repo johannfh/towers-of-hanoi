@@ -4,7 +4,7 @@ import typing
 
 import pygame
 
-from button import Button
+import button
 import colors
 from constants import (
     AUXILARY_TOWER,
@@ -188,14 +188,14 @@ def from_assets(path: str) -> str:
 incr_button_img = pygame.image.load(from_assets("images/increment_button.png"))
 decr_button_img = pygame.image.load(from_assets("images/decrement_button.png"))
 
-incr_button = Button(
+incr_button = button.Button(
     x=MARGIN_HORIZONTAL,
     y=MARGIN_VERTICAL,
     image=incr_button_img,
     name="IncrementDisksButton",
 )
 
-decr_button = Button(
+decr_button = button.Button(
     x=SCREEN_WIDTH - MARGIN_HORIZONTAL - incr_button_img.get_width(),
     y=MARGIN_VERTICAL,
     image=decr_button_img,
@@ -207,7 +207,7 @@ pygame.font.init()
 font = pygame.font.SysFont(FONT_FAMILY, FONT_SIZE)
 
 solve_text = font.render("Solve!", True, colors.BLACK)
-solve_button = Button(
+solve_button = button.Button(
     x=int(screen.get_width() / 2 - solve_text.get_width() / 2),
     y=MARGIN_VERTICAL + FONT_SIZE,
     image=solve_text,
