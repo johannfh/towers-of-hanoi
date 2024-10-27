@@ -1,4 +1,3 @@
-import dataclasses
 import logging
 import time
 import typing
@@ -26,7 +25,7 @@ from constants import (
     FPS,
 )
 import towers
-from towers_of_hanoi import towers_of_hanoi, Move
+import towers_of_hanoi
 import utils
 
 # TODO: Maybe make this dependant on a flag
@@ -35,7 +34,7 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 """The logger instance for logging game events."""
 
-move_queue: utils.Queue[Move] = utils.Queue()
+move_queue: utils.Queue[towers_of_hanoi.Move] = utils.Queue()
 """Remaining disk moves"""
 
 disks = 3
@@ -96,7 +95,7 @@ moving_disk_data: MovingDisk = MovingDisk(
 )
 """Contains data related to the current disk being moved"""
 
-current_move: Move | None = None
+current_move: towers_of_hanoi.Move | None = None
 """Current move being processed"""
 
 solve_towers = False
@@ -109,7 +108,7 @@ hanoi_towers = towers.generate_towers(
 """(`source`, `target`, `destination`)"""
 
 move_queue.enqueue(
-    *towers_of_hanoi(
+    *towers_of_hanoi.towers_of_hanoi(
         disks,
         SOURCE_TOWER,
         DESTINATION_TOWER,
@@ -146,7 +145,7 @@ def update_disks(transform: typing.Callable[[int], int]):
     move_queue.clear()
 
     move_queue.enqueue(
-        *towers_of_hanoi(
+        *towers_of_hanoi.towers_of_hanoi(
             disks,
             SOURCE_TOWER,
             DESTINATION_TOWER,
