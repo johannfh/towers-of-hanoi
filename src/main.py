@@ -297,6 +297,10 @@ while running:
             moved_disk = moving_disk_data.disk
             target_tower.disks.append(moved_disk)
 
+            # Update the heights of each towers disks so they are correctly stacked
+            for tower in hanoi_towers:
+                tower.collapse_disk_heights()
+
             moving_disk_data.reset()
             current_move = None
         else:
@@ -307,9 +311,6 @@ while running:
 
         solve_towers = not towers_solved()
 
-    # Update the heights of each towers disks so they are correctly stacked
-    for tower in hanoi_towers:
-        tower.collapse_disk_heights()
 
     disk_count_text = pygame.font.SysFont(FONT_FAMILY, 25).render(
         f"Number of disks: {disks}", True, colors.BLACK
