@@ -21,7 +21,8 @@ Can optionally take `D` as the first argument
 class EventEmitter(Generic[E, D]):
     def __init__(self):
         self._listeners: Dict[E, List[Listener[D]]] = {}
-        pass
+        """Contains every `Listener` currently listening
+        to events of this `EventEmitter` instance."""
 
     def add_event_listener(self, event: E, listener: Listener[D]):
         """
