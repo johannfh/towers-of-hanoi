@@ -1,7 +1,7 @@
-from abc import ABC, abstractmethod
 from collections.abc import Callable
 from enum import Enum
-from typing import Dict, Generic, List, Optional, TypeVar
+from typing import Dict, Generic, List, TypeVar, Union
+import inspect
 
 E = TypeVar("E", bound=Enum)
 """Event name type"""
@@ -9,13 +9,18 @@ E = TypeVar("E", bound=Enum)
 D = TypeVar("D")
 """Event data type"""
 
-Listener = Callable[[D], None]
-"""Event listener for an `EventEmitter`"""
+
+Listener = Union[Callable[[], None], Callable[[D], None]]
+"""
+Event listener for an `EventEmitter`.
+
+Can optionally take `D` as the first argument
+"""
 
 
 class EventEmitter(Generic[E, D]):
     def __init__(self):
-        self._listeners: Dict[E, List[Listener[D]]]
+        self._listeners: Dict[E, List[Listener[D]]] = {}
         pass
 
     def add_event_listener(self, event: E, listener: Listener[D]):
@@ -28,12 +33,11 @@ class EventEmitter(Generic[E, D]):
         listeners = self._listeners.get(event)
 
         if not listeners:
-            self._listeners[event].append(listener)
+            self._listeners[event] = [listener]
             return
 
         if listener not in listeners:
-            listeners.append(listener)
-            pass
+            self._listeners[event].append(listener)
 
     def remove_event_listener(self, event: E, listener: Listener[D]):
         """
@@ -58,4 +62,14 @@ class EventEmitter(Generic[E, D]):
             return
 
         for listener in listeners:
-            listener(data)
+            # TODO: make this actually typesafe...
+            sig = inspect.signature(listener)
+            match len(sig.parameters):
+                case 0:
+                    listener()  # type: ignore
+                case 1:
+                    listener(data)  # type: ignore
+                case _:
+                    # this should never happen
+                    exit()
+                    assert False, f"{listener} did not match type `Listener`"
