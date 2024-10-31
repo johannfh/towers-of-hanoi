@@ -26,11 +26,9 @@ from .constants import (
     SOURCE_TOWER,
     TOP_DISK_COLOR,
     TOWER_POSITIONS,
-    TOWERS,
 )
 from .tower import Tower, generate_towers
 from .moving_disk import MovingDisk
-from .disk import Disk
 
 
 # load assets
@@ -173,6 +171,7 @@ class App(EventEmitter[AppEvents, None]):
                     self._current_move = self._move_queue.dequeue()
                     self._logger.info(self._current_move)
 
+                # take the next disk from the tower
                 if (
                     not self._towers_solved()
                     and not self._moving_disk_data.disk
@@ -187,7 +186,7 @@ class App(EventEmitter[AppEvents, None]):
                     current_position = pygame.Vector2(
                         TOWER_POSITIONS[self._current_move.source][0] + disk.left,
                         TOWER_POSITIONS[self._current_move.source][1]
-                        - source_tower.disk_height * (len(source_tower.disks) + 1),
+                        - source_tower.disk_height * (len(source_tower.disks)),
                     )
 
                     target_position = pygame.Vector2(
@@ -200,6 +199,7 @@ class App(EventEmitter[AppEvents, None]):
                         disk, current_position, target_position
                     )
 
+                # if the moving disk has reached the target position
                 if self._moving_disk_data.reached_target():
                     assert self._current_move, "current_move should be defined here"
                     assert self._moving_disk_data.disk, "moving disk should be defined"
@@ -296,7 +296,7 @@ class App(EventEmitter[AppEvents, None]):
     def _towers_solved(self) -> bool:
         return (
             len(self._towers[SOURCE_TOWER].disks) == 0
-            and len(self._towers[TOWERS["auxiliary"]].disks) == 0
+            and len(self._towers[AUXILIARY_TOWER].disks) == 0
             and len(self._towers[AUXILIARY_TOWER].disks) == self._disks
         )
 
