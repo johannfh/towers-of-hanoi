@@ -32,8 +32,8 @@ class Button(EventEmitter[ButtonEvents, None]):
 
         self._sprite = pygame.transform.scale(sprite, (width * scale, height * scale))
 
-        self._rect = self._sprite.get_rect()
-        self._rect.topleft = topleft
+        self.rect = self._sprite.get_rect()
+        self.rect.topleft = topleft
 
         self._hovering = False
         self._pressed = False
@@ -43,10 +43,10 @@ class Button(EventEmitter[ButtonEvents, None]):
         left_click = pygame.mouse.get_pressed()[0]
 
         # handle hovering
-        if not self._hovering and self._rect.collidepoint(mouse_position):
+        if not self._hovering and self.rect.collidepoint(mouse_position):
             self._hovering = True
             self.emit(ButtonEvents.MOUSE_OVER, None)
-        elif self._hovering and not self._rect.collidepoint(mouse_position):
+        elif self._hovering and not self.rect.collidepoint(mouse_position):
             self._hovering = False
             self.emit(ButtonEvents.MOUSE_OUT, None)
 
@@ -58,4 +58,4 @@ class Button(EventEmitter[ButtonEvents, None]):
             self._pressed = False
             self.emit(ButtonEvents.MOUSE_UP, None)
 
-        surface.blit(self._sprite, self._rect)
+        surface.blit(self._sprite, self.rect)
