@@ -1,6 +1,8 @@
 import pygame
 
 from .queue import Queue
+from .math import move_linear, lerp, clamp
+
 
 def get_center(screen: pygame.Surface) -> pygame.Vector2:
     return pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)

@@ -1,6 +1,7 @@
 import logging
 
-from view.app import SCREEN_HEIGHT, SCREEN_WIDTH, App
+from view.app import App
+from view.constants import SCREEN_HEIGHT, SCREEN_WIDTH
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
