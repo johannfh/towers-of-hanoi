@@ -3,7 +3,6 @@ import pygame
 from utils import colors
 
 
-TOWERS = {"source": 0, "auxiliary": 1, "destination": 2}
 SOURCE_TOWER = 0
 AUXILIARY_TOWER = 1
 DESTINATION_TOWER = 2
