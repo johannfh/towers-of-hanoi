@@ -45,3 +45,7 @@ class Queue(Generic[T]):
     def __len__(self) -> int:
         """Return the number of items in this `Queue`."""
         return len(self._items)
+    
+    def __str__(self) -> str:
+        elements = [str(s) for s in self._items]
+        return ", ".join(elements)
