@@ -1,5 +1,6 @@
 import pygame
 
+from .queue import Queue
 
 def get_center(screen: pygame.Surface) -> pygame.Vector2:
     return pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
