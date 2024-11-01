@@ -4,7 +4,7 @@ PROJECT_NAME = "Towers of Hanoi"
 """Name of this project"""
 
 SOURCE_TOWER = 0
-AUXILARY_TOWER = 1
+AUXILIARY_TOWER = 1
 DESTINATION_TOWER = 2
 
 LOG_FPS = False

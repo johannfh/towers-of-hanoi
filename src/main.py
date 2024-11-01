@@ -7,7 +7,7 @@ import pygame
 import components
 import colors
 from constants import (
-    AUXILARY_TOWER,
+    AUXILIARY_TOWER,
     DESTINATION_TOWER,
     DISK_COLORS,
     DISK_SPEED,
@@ -48,7 +48,7 @@ move_queue.enqueue(
         disks,
         SOURCE_TOWER,
         DESTINATION_TOWER,
-        AUXILARY_TOWER,
+        AUXILIARY_TOWER,
     )
 )
 
@@ -113,7 +113,7 @@ def update_disks(transform: typing.Callable[[int], int]):
             disks,
             SOURCE_TOWER,
             DESTINATION_TOWER,
-            AUXILARY_TOWER,
+            AUXILIARY_TOWER,
         )
     )
 
