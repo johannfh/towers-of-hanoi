@@ -1,6 +1,7 @@
 import functools
 import typing
 
+
 class Move:
     source: int
     destination: int
@@ -12,9 +13,11 @@ class Move:
     def __str__(self) -> str:
         return f"{self.source} -> {self.destination}"
 
+
 def print_moves(moves: typing.List[Move]) -> None:
     for move in moves:
         print(move)
+
 
 @functools.cache
 def towers_of_hanoi(
@@ -32,16 +35,13 @@ def towers_of_hanoi(
     assert source != auxilary, f"{collision_error_msg} source == auxilary"
     assert destination != auxilary, f"{collision_error_msg} destination == auxilary"
 
-    moves: typing.List[Move] = []
     if n <= 1:
-        moves.append(Move(source, destination))
-    else:
-        for i in towers_of_hanoi(n - 1, source, auxilary, destination):
-            moves.append(i)
+        return [Move(source, destination)]
 
-        moves.append(Move(source, destination))
+    moves: typing.List[Move] = []
 
-        for i in towers_of_hanoi(n - 1, auxilary, destination, source):
-            moves.append(i)
+    moves += [move for move in towers_of_hanoi(n - 1, source, auxilary, destination)]
+    moves.append(Move(source, destination))
+    moves += [move for move in towers_of_hanoi(n - 1, auxilary, destination, source)]
 
     return moves
